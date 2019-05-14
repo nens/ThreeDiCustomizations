@@ -24,30 +24,20 @@
  *                                                                         *
  ***************************************************************************/
 """
-
-
 import os
 import re
 import webbrowser
 
-try:
-    import sys
-    from pydevd import *
-except Exception as e:
-    pass
-
-from PyQt4 import QtCore
-from PyQt4 import QtGui
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4.QtCore import QCoreApplication
-from PyQt4.Qt import QApplication
-
-from qgis.core import *
-from qgis.gui import *
-
-import gui.generated.resources_rc
-import qgis.utils
+from qgis.PyQt.Qt import QAction
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtCore import QCoreApplication
+from qgis.PyQt.QtCore import QFileSystemWatcher
+from qgis.PyQt.QtCore import QSettings
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtGui import QPixmap
+from qgis.PyQt.QtWidgets import qApp
+from qgis.PyQt.QtWidgets import QApplication
+from qgis.PyQt.QtWidgets import QSplashScreen
 
 
 def reload_style(path):
@@ -67,7 +57,7 @@ watch = QFileSystemWatcher()
 watch.fileChanged.connect(reload_style)
 
 
-class SplashScreen():
+class SplashScreen(object):
     def __init__(self, iface):
 
         self.iface = iface
@@ -86,13 +76,13 @@ class SplashScreen():
         self.app.startDragTime()
 
         self.iface.initializationCompleted.connect(self.customization)
-        QtGui.qApp.processEvents()
+        qApp.processEvents()
 
         self.applyStyle()
 
     def initGui(self):
         QSettings().setValue("/qgis/hideSplash", True)
-        QtGui.qApp.processEvents()
+        qApp.processEvents()
 
         icon = QIcon(":/3Di_images/images/logo.png")
         self.app.setWindowIcon(icon)
@@ -100,7 +90,7 @@ class SplashScreen():
 
         self.iface.mainWindow().setWindowTitle(self.windowTitle)
 
-        QtGui.qApp.processEvents()
+        qApp.processEvents()
 
         if not self.iface.mainWindow().isVisible():
             self.splash_pix = QPixmap(':/3Di_images/images/splash.png')
@@ -108,7 +98,7 @@ class SplashScreen():
             self.splash = QSplashScreen(self.splash_pix)
             self.splash.setMask(self.splash_pix.mask())
             self.splash.show()
-            QtGui.qApp.processEvents()
+            qApp.processEvents()
         self.applyStyle()
         self.addHelpMenuItem()
         return
@@ -117,7 +107,7 @@ class SplashScreen():
         pass
 
     def unload(self):
-        QtGui.qApp.processEvents()
+        qApp.processEvents()
         self.iface.initializationCompleted.disconnect(self.customization)
         self.helpAction.deleteLater()
         return
@@ -125,7 +115,7 @@ class SplashScreen():
     def customization(self):
         self.splash.finish(self.iface.mainWindow())
         self.iface.mainWindow().setWindowTitle(self.windowTitle)
-        QtGui.qApp.processEvents()
+        qApp.processEvents()
         self.applyStyle()
 
     def applyStyle(self):
