@@ -23,15 +23,7 @@
  ***************************************************************************/
 """
 
-import sys
-import os
-import site
- 
-# try:
-#     sys.path.append("X:/eclipse/plugins/org.python.pydev_5.6.0.201703221358/pysrc")
-# except:
-#     None
-    
+
 def classFactory(iface):
-    from SplashScreen import SplashScreen
+    from .SplashScreen import SplashScreen
     return SplashScreen(iface)
