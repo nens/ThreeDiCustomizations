@@ -39,6 +39,7 @@ from qgis.PyQt.QtWidgets import qApp
 from qgis.PyQt.QtWidgets import QApplication
 from qgis.PyQt.QtWidgets import QSplashScreen
 
+from ThreeDiCustomizations.gui.generated import resources_rc
 
 def reload_style(path):
     # Some applications will remove a file and rewrite it.  QFileSystemWatcher will
