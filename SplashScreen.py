@@ -84,7 +84,7 @@ class SplashScreen(object):
         QSettings().setValue("/qgis/hideSplash", True)
         qApp.processEvents()
 
-        icon = QIcon(":/3Di_images/images/logo.png")
+        icon = QIcon(":/3Di_images/3Di_images/images/logo.png")
         self.app.setWindowIcon(icon)
         self.iface.mainWindow().setWindowIcon(icon)
 
@@ -93,7 +93,7 @@ class SplashScreen(object):
         qApp.processEvents()
 
         if not self.iface.mainWindow().isVisible():
-            self.splash_pix = QPixmap(':/3Di_images/images/splash.png')
+            self.splash_pix = QPixmap(':/3Di_images/3Di_images/images/splash.png')
             self.splash = QSplashScreen(self.splash_pix, Qt.WindowStaysOnTopHint)
             self.splash = QSplashScreen(self.splash_pix)
             self.splash.setMask(self.splash_pix.mask())
@@ -129,7 +129,7 @@ class SplashScreen(object):
     def addHelpMenuItem(self):
         if self.iface.firstRightStandardMenu().objectName() == 'mHelpMenu':
             # help menu is in the expected location
-            self.helpAction = QAction(QIcon(":/3Di_images/images/logo.png"),
+            self.helpAction = QAction(QIcon(":/3Di_images/3Di_images/images/logo.png"),
                                       "3Di Help", self.iface.mainWindow())
             self.helpAction.triggered.connect(self.open3DiHelp)
             self.helpAction.setWhatsThis("3Di Help")
