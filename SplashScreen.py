@@ -3,7 +3,7 @@
 /***************************************************************************
  ThreeDiCustomizations
                                  A QGIS plugin
- SplashScreen and other customizations for the 3Di_Modeler_Interface
+ SplashScreen and other customizations for the 3Di_Modeller_Interface
                              -------------------
         begin                : 2018-08-22
         Marco Duiker - MD-kwadraat
@@ -64,7 +64,7 @@ class SplashScreen(object):
         self.iface = iface
         self.plugin_dir = os.path.dirname(__file__)
 
-        self.windowTitle = '3Di Modeler Interface - Powered by QGIS'
+        self.windowTitle = '3Di Modeller Interface - Powered by QGIS'
 
         self.app = QApplication.instance()
         self.QApp = QCoreApplication.instance()
