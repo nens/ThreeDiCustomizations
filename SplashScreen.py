@@ -37,9 +37,11 @@ from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtGui import QPixmap
 from qgis.PyQt.QtWidgets import qApp
 from qgis.PyQt.QtWidgets import QApplication
+from qgis.PyQt.QtWidgets import QMenu
 from qgis.PyQt.QtWidgets import QSplashScreen
 
 from ThreeDiCustomizations.gui.generated import resources_rc
+
 
 def reload_style(path):
     # Some applications will remove a file and rewrite it.  QFileSystemWatcher will
@@ -50,7 +52,7 @@ def reload_style(path):
         stylesheet = f.read()
         # Update the image paths to use full paths. Fixes image loading in styles
         path = os.path.dirname(path).replace("\\", "/")
-        stylesheet = re.sub(r'url\((.*?)\)', r'url("{}/\1")'.format(path), stylesheet)
+        stylesheet = re.sub(r"url\((.*?)\)", r'url("{}/\1")'.format(path), stylesheet)
         QApplication.instance().setStyleSheet(stylesheet)
 
 
@@ -64,7 +66,7 @@ class SplashScreen(object):
         self.iface = iface
         self.plugin_dir = os.path.dirname(__file__)
 
-        self.windowTitle = '3Di Modeller Interface - Powered by QGIS'
+        self.windowTitle = "3Di Modeller Interface - Powered by QGIS"
 
         self.app = QApplication.instance()
         self.QApp = QCoreApplication.instance()
@@ -94,7 +96,7 @@ class SplashScreen(object):
         qApp.processEvents()
 
         if not self.iface.mainWindow().isVisible():
-            self.splash_pix = QPixmap(':/3Di_images/3Di_images/images/splash.png')
+            self.splash_pix = QPixmap(":/3Di_images/3Di_images/images/splash.png")
             self.splash = QSplashScreen(self.splash_pix, Qt.WindowStaysOnTopHint)
             self.splash = QSplashScreen(self.splash_pix)
             self.splash.setMask(self.splash_pix.mask())
@@ -120,19 +122,34 @@ class SplashScreen(object):
         self.applyStyle()
 
     def applyStyle(self):
-        path = os.path.abspath(os.path.join(self.plugin_dir, 'Modeler Interface', 'stylesheet.qss'))
+        path = os.path.abspath(
+            os.path.join(self.plugin_dir, "Modeler Interface", "stylesheet.qss")
+        )
         watch.removePaths(watch.files())
         reload_style(path)
 
     def open3DiHelp(self):
         webbrowser.open_new("https://docs.3di.lizard.net/en/stable/")
 
-    def addHelpMenuItem(self):
-        if self.iface.firstRightStandardMenu().objectName() == 'mHelpMenu':
-            # help menu is in the expected location
-            self.helpAction = QAction(QIcon(":/3Di_images/3Di_images/images/logo.png"),
-                                      "3Di Help", self.iface.mainWindow())
-            self.helpAction.triggered.connect(self.open3DiHelp)
-            self.helpAction.setWhatsThis("3Di Help")
+    def find_3di_menu(self):
+        for i, action in enumerate(self.iface.mainWindow().menuBar().actions()):
+            if action.menu().objectName() == "m3Di":
+                return action.menu()
+        return None
 
-            self.iface.firstRightStandardMenu().addAction(self.helpAction)
+    def addHelpMenuItem(self):
+        menu = self.find_3di_menu()
+        if not menu:
+            menu = QMenu("&3Di", self.iface.mainWindow().menuBar())
+            menu.setObjectName("m3Di")
+            self.iface.mainWindow().menuBar().addMenu(menu)
+
+        self.helpAction = QAction(
+            QIcon(":/3Di_images/3Di_images/images/logo.png"),
+            "Documentation",
+            self.iface.mainWindow(),
+        )
+        self.helpAction.triggered.connect(self.open3DiHelp)
+        self.helpAction.setWhatsThis("3Di Documentation")
+
+        menu.addAction(self.helpAction)
