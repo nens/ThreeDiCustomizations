@@ -26,6 +26,7 @@
 """
 import os
 import re
+import sys
 import webbrowser
 
 from qgis.PyQt.Qt import QAction
@@ -38,7 +39,11 @@ from qgis.PyQt.QtGui import QPixmap
 from qgis.PyQt.QtWidgets import qApp
 from qgis.PyQt.QtWidgets import QApplication
 from qgis.PyQt.QtWidgets import QMenu
+from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtWidgets import QSplashScreen
+from qgis.PyQt.uic import loadUi
+
+from qgis.utils import iface
 
 from ThreeDiCustomizations.gui.generated import resources_rc
 
@@ -60,9 +65,15 @@ watch = QFileSystemWatcher()
 watch.fileChanged.connect(reload_style)
 
 
+class About3DiMIDialog(QDialog):
+    def __init__(self, parent):
+        super(About3DiMIDialog, self).__init__(parent)
+        ui_fn = os.path.join(os.path.dirname(__file__), 'ui', 'About3DiMIDialog.ui')
+        loadUi(ui_fn, self)
+
+
 class SplashScreen(object):
     def __init__(self, iface):
-
         self.iface = iface
         self.plugin_dir = os.path.dirname(__file__)
 
@@ -128,8 +139,14 @@ class SplashScreen(object):
         watch.removePaths(watch.files())
         reload_style(path)
 
+    @staticmethod
     def open3DiHelp(self):
-        webbrowser.open_new("https://docs.3di.lizard.net/en/stable/")
+        webbrowser.open_new("https://docs.3di.live")
+
+    @staticmethod
+    def about_3di_mi_dialog():
+        dialog = About3DiMIDialog(iface.mainWindow())
+        dialog.exec_()
 
     def find_3di_menu(self):
         for i, action in enumerate(self.iface.mainWindow().menuBar().actions()):
@@ -153,3 +170,13 @@ class SplashScreen(object):
         self.helpAction.setWhatsThis("3Di Documentation")
 
         menu.addAction(self.helpAction)
+
+        about_action = QAction(
+            # QIcon(":/3Di_images/3Di_images/images/logo.png"),
+            "About 3Di Modeller Interface",
+            self.iface.mainWindow(),
+        )
+        about_action.triggered.connect(self.about_3di_mi_dialog)
+        about_action.setWhatsThis("About 3Di Modeller Interface")
+
+        menu.addAction(about_action)
