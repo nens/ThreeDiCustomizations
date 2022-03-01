@@ -1,12 +1,12 @@
 [general]
-name=ThreeDiCustomizations
+name=3Di Customizations
 qgisMinimumVersion=3.4.5
-description=3Di SplashScreen and other Gui customizations for 3Di_Modeler_Interface. 
-version=1.1
-author=Marco Duiker
-email=md@md-kwadraat.nl
-tags= customization,splash,configuration,themes
-homepage=
+description=3Di SplashScreen and other Gui customizations for 3Di Modeller Interface.
+version=1.2
+author=Nelen & Schuurmans
+email=servicedesk@nelen-schuurmans.nl
+tags=3Di,customization,splash,configuration,themes
+homepage=www.3diwatermanagement.com
 tracker=
 repository=
 icon=images/icon.png

@@ -26,6 +26,7 @@
 """
 import os
 import re
+import sys
 import webbrowser
 
 from qgis.PyQt.Qt import QAction
@@ -37,9 +38,15 @@ from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtGui import QPixmap
 from qgis.PyQt.QtWidgets import qApp
 from qgis.PyQt.QtWidgets import QApplication
+from qgis.PyQt.QtWidgets import QMenu
+from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtWidgets import QSplashScreen
+from qgis.PyQt.uic import loadUi
+
+from qgis.utils import iface
 
 from ThreeDiCustomizations.gui.generated import resources_rc
+
 
 def reload_style(path):
     # Some applications will remove a file and rewrite it.  QFileSystemWatcher will
@@ -50,7 +57,7 @@ def reload_style(path):
         stylesheet = f.read()
         # Update the image paths to use full paths. Fixes image loading in styles
         path = os.path.dirname(path).replace("\\", "/")
-        stylesheet = re.sub(r'url\((.*?)\)', r'url("{}/\1")'.format(path), stylesheet)
+        stylesheet = re.sub(r"url\((.*?)\)", r'url("{}/\1")'.format(path), stylesheet)
         QApplication.instance().setStyleSheet(stylesheet)
 
 
@@ -58,13 +65,19 @@ watch = QFileSystemWatcher()
 watch.fileChanged.connect(reload_style)
 
 
+class About3DiMIDialog(QDialog):
+    def __init__(self, parent):
+        super(About3DiMIDialog, self).__init__(parent)
+        ui_fn = os.path.join(os.path.dirname(__file__), 'ui', 'About3DiMIDialog.ui')
+        loadUi(ui_fn, self)
+
+
 class SplashScreen(object):
     def __init__(self, iface):
-
         self.iface = iface
         self.plugin_dir = os.path.dirname(__file__)
 
-        self.windowTitle = '3Di Modeller Interface - Powered by QGIS'
+        self.windowTitle = "3Di Modeller Interface - Powered by QGIS"
 
         self.app = QApplication.instance()
         self.QApp = QCoreApplication.instance()
@@ -94,7 +107,7 @@ class SplashScreen(object):
         qApp.processEvents()
 
         if not self.iface.mainWindow().isVisible():
-            self.splash_pix = QPixmap(':/3Di_images/3Di_images/images/splash.png')
+            self.splash_pix = QPixmap(":/3Di_images/3Di_images/images/splash.png")
             self.splash = QSplashScreen(self.splash_pix, Qt.WindowStaysOnTopHint)
             self.splash = QSplashScreen(self.splash_pix)
             self.splash.setMask(self.splash_pix.mask())
@@ -120,19 +133,50 @@ class SplashScreen(object):
         self.applyStyle()
 
     def applyStyle(self):
-        path = os.path.abspath(os.path.join(self.plugin_dir, 'Modeler Interface', 'stylesheet.qss'))
+        path = os.path.abspath(
+            os.path.join(self.plugin_dir, "Modeler Interface", "stylesheet.qss")
+        )
         watch.removePaths(watch.files())
         reload_style(path)
 
+    @staticmethod
     def open3DiHelp(self):
-        webbrowser.open_new("https://docs.3di.lizard.net/en/stable/")
+        webbrowser.open_new("https://docs.3di.live")
+
+    @staticmethod
+    def about_3di_mi_dialog():
+        dialog = About3DiMIDialog(iface.mainWindow())
+        dialog.exec_()
+
+    def find_3di_menu(self):
+        for i, action in enumerate(self.iface.mainWindow().menuBar().actions()):
+            if action.menu().objectName() == "m3Di":
+                return action.menu()
+        return None
 
     def addHelpMenuItem(self):
-        if self.iface.firstRightStandardMenu().objectName() == 'mHelpMenu':
-            # help menu is in the expected location
-            self.helpAction = QAction(QIcon(":/3Di_images/3Di_images/images/logo.png"),
-                                      "3Di Help", self.iface.mainWindow())
-            self.helpAction.triggered.connect(self.open3DiHelp)
-            self.helpAction.setWhatsThis("3Di Help")
+        menu = self.find_3di_menu()
+        if not menu:
+            menu = QMenu("&3Di", self.iface.mainWindow().menuBar())
+            menu.setObjectName("m3Di")
+            self.iface.mainWindow().menuBar().addMenu(menu)
 
-            self.iface.firstRightStandardMenu().addAction(self.helpAction)
+        self.helpAction = QAction(
+            QIcon(":/3Di_images/3Di_images/images/logo.png"),
+            "Documentation",
+            self.iface.mainWindow(),
+        )
+        self.helpAction.triggered.connect(self.open3DiHelp)
+        self.helpAction.setWhatsThis("3Di Documentation")
+
+        menu.addAction(self.helpAction)
+
+        about_action = QAction(
+            # QIcon(":/3Di_images/3Di_images/images/logo.png"),
+            "About 3Di Modeller Interface",
+            self.iface.mainWindow(),
+        )
+        about_action.triggered.connect(self.about_3di_mi_dialog)
+        about_action.setWhatsThis("About 3Di Modeller Interface")
+
+        menu.addAction(about_action)
