@@ -1,15 +1,20 @@
 [general]
 name=3Di Customisations
 qgisMinimumVersion=3.4.5
+qgisMaximumVersion=3.99
 description=3Di SplashScreen and other Gui customisations for 3Di Modeller Interface.
-version=1.2
+version=1.2.6
 author=Nelen & Schuurmans
 email=servicedesk@nelen-schuurmans.nl
 tags=3Di,customisation,splash,configuration,themes
+about=3Di Customizations
 homepage=www.3diwatermanagement.com
-tracker=
-repository=
+tracker=https://github.com/nens/ThreeDiCustomizations/issues
+repository=https://github.com/nens/ThreeDiCustomizations/issues
+changelog=https://github.com/nens/ThreeDiCustomizations/blob/master/HISTORY.rst
 icon=images/icon.png
+category=Plugins
+hasProcessingProvider=no
 experimental=False
 deprecated=False
 
