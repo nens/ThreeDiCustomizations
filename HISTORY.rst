@@ -1,7 +1,7 @@
 History
 =======
 
-1.2.4 (unreleased)
+1.2.4 (2022-06-01)
 ------------------
 
 - Updated documentation.
