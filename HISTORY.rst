@@ -4,7 +4,7 @@ History
 1.2.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Updated Github action to always build zip as rudimentary test.
 
 
 1.2.4 (2022-06-01)
