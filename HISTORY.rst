@@ -4,7 +4,7 @@ History
 1.2.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Removed debugging build settings.
 
 
 1.2.5 (2022-06-01)
