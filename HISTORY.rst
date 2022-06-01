@@ -4,13 +4,13 @@ History
 1.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Restructured the project to support automated deployment.
 
 
 1.2.2 (2022-05-31)
 ------------------
 
-- Nothing changed yet.
+- Added several deployment files.
 
 
 1.2.1 (2022-05-31)

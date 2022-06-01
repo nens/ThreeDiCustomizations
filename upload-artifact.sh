@@ -2,7 +2,7 @@
 set -e
 set -u
 
-VERSION=$(grep "^version" ./metadata.txt | cut -d= -f2)
+VERSION=$(grep "^version" ./ThreeDiCustomizations/metadata.txt | cut -d= -f2)
 
 # ARTIFACTS_KEY should be set as env variable in the travis UI.
 ARTIFACT=ThreeDiCustomizations.${VERSION}.zip
