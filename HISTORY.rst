@@ -1,7 +1,7 @@
 History
 =======
 
-1.2.5 (unreleased)
+1.2.5 (2022-06-01)
 ------------------
 
 - Updated Github action to always build zip as rudimentary test.
