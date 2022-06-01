@@ -1,7 +1,7 @@
 History
 =======
 
-1.2.3 (unreleased)
+1.2.3 (2022-06-01)
 ------------------
 
 - Restructured the project to support automated deployment.
